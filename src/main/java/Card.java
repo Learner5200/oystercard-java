@@ -34,12 +34,21 @@ class Card {
         this.currentJourney = journey;
     }
 
-    void touchIn(Station station) {
+    void touchIn(Station station) throws Exception {
+        if (!currentJourney.isComplete()) {
+            payCurrentJourneyCost();
+        }
         setCurrentJourney(new Journey(station));
     }
 
-    void touchOut(Station station) {
+    void touchOut(Station station) throws Exception {
         currentJourney.exit(station);
+        payCurrentJourneyCost();
+    }
+
+    void payCurrentJourneyCost() throws Exception {
+        int fare = currentJourney.calculateFare();
+        spend(fare);
     }
 
 }

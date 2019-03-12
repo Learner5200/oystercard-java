@@ -48,7 +48,7 @@ public class CardTest {
     }
 
     @Test
-    public void touchingInCreatesNewJourney() {
+    public void touchingInCreatesNewJourney() throws Exception {
         Station mockStation1 = mock(Station.class);
         card.touchIn(mockStation1);
         Journey currentJourney = card.getCurrentJourney();
@@ -56,22 +56,24 @@ public class CardTest {
     }
 
     @Test
-    public void touchingOutUpdatesCurrentJourney() {
-//        Station mockStation1 = mock(Station.class);
-//        Station mockStation2 = mock(Station.class);
-//        card.touchIn(mockStation1);
-//        Journey currentJourneySpy = spy(card.getCurrentJourney());
-//        card.touchOut(mockStation2);
-//        verify(currentJourneySpy).exit(mockStation2);
+    public void touchingOutUpdatesCurrentJourney() throws Exception {
+        Station mockStation1 = mock(Station.class);
+        Station mockStation2 = mock(Station.class);
+        Journey mockJourney = mock(Journey.class);
+        card.setCurrentJourney(mockJourney);
+        card.touchOut(mockStation2);
+        verify(mockJourney).exit(mockStation2);
     }
 
     @Test
-    public void touchingOutSpendsFare() {
+    public void touchingOutSpendsFare() throws Exception {
+        card = spy(card);
         Station mockStation1 = mock(Station.class);
         Station mockStation2 = mock(Station.class);
-        card.touchIn(mockStation1);
+        Journey mockJourney = mock(Journey.class);
+        card.setCurrentJourney(mockJourney);
         card.touchOut(mockStation2);
-        int fare = card.getCurrentJourney().calculateFare();
-
+        int fare = mockJourney.calculateFare();
+        verify(card).spend(fare);
     }
 }
